@@ -3,6 +3,7 @@ package dev.ropimasi.curso.algafood.infrastructure.repository;
 import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import dev.ropimasi.curso.algafood.domain.model.Cozinha;
 import dev.ropimasi.curso.algafood.domain.repository.CozinhaRepository;
 import jakarta.persistence.EntityManager;
@@ -13,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 
 
-@Component
+@Repository
 public class CozinhaRepositoryImpl implements CozinhaRepository {
 
 	@PersistenceContext
@@ -25,6 +26,14 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 	public List<Cozinha> listar() {
 		TypedQuery<Cozinha> query = manager.createQuery("from Cozinha", Cozinha.class);
 		return query.getResultList();
+	}
+
+
+
+	@Override
+	public List<Cozinha> ListarPorNome(String nome) {
+		return manager.createQuery("FROM Cozinha WHERE nome LIKE :nome", Cozinha.class)
+				.setParameter("nome", "%" + nome + "%").getResultList();
 	}
 
 
