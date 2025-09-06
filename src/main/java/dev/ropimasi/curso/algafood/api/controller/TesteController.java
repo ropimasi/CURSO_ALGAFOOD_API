@@ -1,12 +1,8 @@
 package dev.ropimasi.curso.algafood.api.controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import dev.ropimasi.curso.algafood.domain.model.Cozinha;
 import dev.ropimasi.curso.algafood.domain.repository.CozinhaRepository;
 
 
@@ -21,9 +17,9 @@ public class TesteController {
 
 
 
-	@GetMapping("/cozinhas/por-nome")
-	public List<Cozinha> cozinhasPornome(@RequestParam("nome") String nome) {
-		return cozinhaRepository.ListarPorNome(nome);
-	}
+	//	@GetMapping("/cozinhas/por-nome")
+	//	public List<Cozinha> cozinhasPornome(@RequestParam("nome") String nome) {
+	//		return cozinhaRepository.consultarPorNome(nome);
+	//	}
 
 }

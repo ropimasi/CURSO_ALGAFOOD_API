@@ -1,6 +1,7 @@
 package dev.ropimasi.curso.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +36,17 @@ public class EstadoController {
 
 	@GetMapping
 	public List<Estado> listar() {
-		return estadoRepository.listar();
+		return estadoRepository.findAll();
 	}
 
 
 
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-		Estado estado = estadoRepository.buscar(estadoId);
+		Optional<Estado> estadoOpt = estadoRepository.findById(estadoId);
 
-		if (estado != null) {
-			return ResponseEntity.ok(estado);
+		if (estadoOpt.isPresent()) {
+			return ResponseEntity.ok(estadoOpt.get());
 		}
 
 		return ResponseEntity.notFound().build();
@@ -64,9 +65,9 @@ public class EstadoController {
 
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-		Estado estadoPersistido = estadoRepository.buscar(estadoId);
+		Optional<Estado> estadoPersistidoOpt = estadoRepository.findById(estadoId);
 
-		if (estadoPersistido != null) {
+		if (estadoPersistidoOpt.isPresent()) {
 			estado.setId(estadoId);
 			estado = estadoCadastroService.salvar(estado);
 			return ResponseEntity.ok(estado);

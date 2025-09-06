@@ -1,6 +1,7 @@
 package dev.ropimasi.curso.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +36,17 @@ public class CidadeController {
 
 	@GetMapping
 	public List<Cidade> listar() {
-		return cidadeRepository.listar();
+		return cidadeRepository.findAll();
 	}
 
 
 
 	@GetMapping(value = "{cidadeId}")
 	public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-		Cidade cidade = cidadeRepository.buscar(cidadeId);
-		if (cidade != null) {
-			return ResponseEntity.ok(cidade);
+		Optional<Cidade> cidadeOpt = cidadeRepository.findById(cidadeId);
+		
+		if (cidadeOpt.isPresent()) {
+			return ResponseEntity.ok(cidadeOpt.get());
 		}
 
 		return ResponseEntity.notFound().build();
@@ -68,9 +70,9 @@ public class CidadeController {
 
 	@PutMapping(value = "/{cidadeId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+	Optional<Cidade> cidadePersistidaOpt = cidadeRepository.findById(cidadeId);
 
-		Cidade cidadePersistida = cidadeRepository.buscar(cidadeId);
-		if (cidadePersistida != null) {
+		if (cidadePersistidaOpt.isPresent()) {
 			cidade.setId(cidadeId);
 			try {
 				cidade = cidadeCadastroService.salvar(cidade);

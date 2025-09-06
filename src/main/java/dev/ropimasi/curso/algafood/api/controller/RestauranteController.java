@@ -3,6 +3,7 @@ package dev.ropimasi.curso.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +42,17 @@ public class RestauranteController {
 
 	@GetMapping
 	public List<Restaurante> listar() {
-		return restauranteRepository.listar();
+		return restauranteRepository.findAll();
 	}
 
 
 
 	@GetMapping(value = "{restauranteId}")
 	public ResponseEntity<Restaurante> buscar(@PathVariable Long restauranteId) {
-		Restaurante restaurante = restauranteRepository.buscar(restauranteId);
-		if (restaurante != null) {
-			return ResponseEntity.ok(restaurante);
+		Optional<Restaurante> restauranteOpt = restauranteRepository.findById(restauranteId);
+
+		if (restauranteOpt.isPresent()) {
+			return ResponseEntity.ok(restauranteOpt.get());
 		}
 
 		return ResponseEntity.notFound().build();
@@ -75,9 +77,11 @@ public class RestauranteController {
 	@PutMapping(value = "/{restauranteId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
 
-		Restaurante restaurantePersistido = restauranteRepository.buscar(restauranteId);
-		if (restaurantePersistido != null) {
+		Optional<Restaurante> restaurantePersistidoOpt = restauranteRepository.findById(restauranteId);
+		
+		if (restaurantePersistidoOpt.isPresent()) {
 			restaurante.setId(restauranteId);
+			
 			try {
 				restaurante = restauranteCadastroService.salvar(restaurante);
 				return ResponseEntity.status(HttpStatus.OK).body(restaurante);
@@ -95,16 +99,17 @@ public class RestauranteController {
 	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
 			@RequestBody Map<String, Object> campos) {
 
-		Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+		Optional<Restaurante> restauranteAtualOpt = restauranteRepository.findById(restauranteId);
 
-		if (restauranteAtual == null) {
+		if (restauranteAtualOpt.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		merge(campos, restauranteAtual);
+		merge(campos, restauranteAtualOpt.get());
 
-		return atualizar(restauranteId, restauranteAtual);
+		return atualizar(restauranteId, restauranteAtualOpt.get());
 	}
+
 
 
 	// Para o atualizarParcial().

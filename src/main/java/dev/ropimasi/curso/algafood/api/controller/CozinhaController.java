@@ -1,6 +1,7 @@
 package dev.ropimasi.curso.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +38,7 @@ public class CozinhaController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cozinha> listar() {
-		return cozinhaRepository.listar();
+		return cozinhaRepository.findAll();
 	}
 
 
@@ -45,7 +46,7 @@ public class CozinhaController {
 	//	@ResponseStatus(value= HttpStatus.OK)
 	@GetMapping(value = "/{cozinhaId}")
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+		Optional<Cozinha> cozinhaOpt = cozinhaRepository.findById(cozinhaId);
 
 		//		return ResponseEntity.status(HttpStatus.OK).body(cozinha);
 		//		return ResponseEntity.ok(cozinha);
@@ -54,8 +55,8 @@ public class CozinhaController {
 		//		headers.add(HttpHeaders.LOCATION, "http://localhost:8080/cozinhas");
 		//		return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
 
-		if (cozinha != null) {
-			return ResponseEntity.ok(cozinha);
+		if (cozinhaOpt.isPresent()) {
+			return ResponseEntity.ok(cozinhaOpt.get());
 		}
 		//		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		return ResponseEntity.notFound().build();
@@ -73,9 +74,9 @@ public class CozinhaController {
 
 	@PutMapping(value = "/{cozinhaId}")
 	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-		Cozinha cozinhaPersistida = cozinhaRepository.buscar(cozinhaId);
+		Optional<Cozinha> cozinhaPersistidaOpt = cozinhaRepository.findById(cozinhaId);
 
-		if (cozinhaPersistida != null) {
+		if (cozinhaPersistidaOpt.isPresent()) {
 			// BeanUtils.copyProperties(cozinha, cozinhaPersistida, "id");
 			cozinha.setId(cozinhaId);
 			cozinha = cozinhaCadastroService.salvar(cozinha);
