@@ -30,6 +30,7 @@ public class CozinhaController {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+	
 
 	@Autowired
 	private CozinhaCadastroService cozinhaCadastroService;
@@ -39,6 +40,7 @@ public class CozinhaController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cozinha> listar() {
 		return cozinhaRepository.findAll();
+		
 	}
 
 

@@ -30,22 +30,30 @@ public class TesteController {
 
 	@GetMapping("/cozinhas/por-nome")
 	public List<Cozinha> cozinhasPornome(@RequestParam("nome") String nome) {
-		return cozinhaRepository.findTodasByNome(nome);
+		return cozinhaRepository.findTodasByNomeContaining(nome);
 	}
 
 
 
 	@GetMapping("/cozinhas/unica-por-nome")
-	public Optional<Cozinha> cozinhaUnicaPornome(@RequestParam("nome") String nome) {
+	public Optional<Cozinha> cozinhaUnicaPorNome(@RequestParam("nome") String nome) {
 		return cozinhaRepository.findUnicaByNome(nome);
 	}
 
 
 
-	@GetMapping("/resstaurantes/por-taxa-frete")
+	@GetMapping("/restaurantes/por-taxa-frete")
 	public List<Restaurante> restaurantePorTaxaFrete(@RequestParam("taxaFreteInicial") BigDecimal taxaFreteInicial,
 			@RequestParam("taxaFreteFinal") BigDecimal taxaFreteFinal) {
 		return restauranteRepository.findByTaxaFreteBetween(taxaFreteInicial, taxaFreteFinal);
+	}
+
+
+
+	@GetMapping("/restaurantes/por-nome-cozinhaid")
+	public List<Restaurante> restaurantePorNomeCozinhaId(@RequestParam("nome") String nome,
+			@RequestParam("cozinhaId") Long cozinhaId) {
+		return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId);
 	}
 
 }

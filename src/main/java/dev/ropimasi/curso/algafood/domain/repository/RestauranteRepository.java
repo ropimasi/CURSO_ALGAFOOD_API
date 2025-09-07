@@ -13,6 +13,7 @@ import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 
 	List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
-	
 
+	List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
+	
 }
