@@ -15,5 +15,7 @@ public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 	List<Cozinha> findTodasByNomeContaining(String nome);
 	
 	Optional<Cozinha> findUnicaByNome(String nome);
+	
+	boolean existsByNome(String nome);
 
 }
