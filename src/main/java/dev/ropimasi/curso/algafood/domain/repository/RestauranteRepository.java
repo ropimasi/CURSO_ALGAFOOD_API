@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 
@@ -14,15 +15,21 @@ import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 
 	List<Restaurante> findByNomeContaining(String nome);
-	
+
 	List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
-	List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
-	
+	//	List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
+
+	//	@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
+	//	List<Restaurante> porNomeCozinhaId(@Param("nome") String nome, @Param("id") Long cozinhaId);
+
+	// Com a named query no orm.xml.
+	List<Restaurante> porNomeCozinhaId(@Param("nome") String nome, @Param("id") Long cozinhaId);
+
 	Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
-	
+
 	List<Restaurante> findTop2ByNomeContaining(String nome);
-	
+
 	int countByCozinhaId(Long cozinha);
-	
+
 }
