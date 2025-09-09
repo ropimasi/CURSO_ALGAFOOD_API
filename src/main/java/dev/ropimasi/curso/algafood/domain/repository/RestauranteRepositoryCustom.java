@@ -11,4 +11,6 @@ public interface RestauranteRepositoryCustom {
 
 	List<Restaurante> porNomeTaxaFreteEntre(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
 
+	List<Restaurante> consulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+
 }

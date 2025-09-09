@@ -92,11 +92,19 @@ public class TesteController {
 		return restauranteRepository.findTop2ByNomeContaining(nome);
 	}
 
-	
+
+
 	@GetMapping("/restaurantes/por-nome-taxa-frete-entre")
-	public List<Restaurante> restaurantePorNomeTaxaFreteEntre(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
-		return restauranteRepository.porNomeTaxaFreteEntre(nome, taxaFreteInicial, taxaFreteFinal);				
+	public List<Restaurante> restaurantePorNomeTaxaFreteEntre(String nome, BigDecimal taxaFreteInicial,
+			BigDecimal taxaFreteFinal) {
+		return restauranteRepository.porNomeTaxaFreteEntre(nome, taxaFreteInicial, taxaFreteFinal);
 	}
-	
-	
+
+
+
+	@GetMapping("/restaurantes/consulta")
+	public List<Restaurante> restaurantesConsulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+		return restauranteRepository.consulta(nome, taxaFreteInicial, taxaFreteFinal);
+	}
+
 }
