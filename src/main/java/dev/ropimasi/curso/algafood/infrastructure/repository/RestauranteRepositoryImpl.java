@@ -1,11 +1,16 @@
 package dev.ropimasi.curso.algafood.infrastructure.repository;
 
+import static dev.ropimasi.curso.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static dev.ropimasi.curso.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import dev.ropimasi.curso.algafood.domain.model.Restaurante;
+import dev.ropimasi.curso.algafood.domain.repository.RestauranteRepository;
 import dev.ropimasi.curso.algafood.domain.repository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,7 +27,11 @@ import jakarta.persistence.criteria.Root;
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries { // SDJ implementação customizada.
 
 	@PersistenceContext
-	private EntityManager em;
+	private EntityManager manager;
+
+	@Autowired
+	@Lazy
+	private RestauranteRepository restauranteRepository;
 
 
 
@@ -31,7 +40,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 			BigDecimal taxaFreteFinal) {
 		var jpql = "from Restaurante where nome like :nome and taxaFrete between :taxaInicial and :taxaFinal";
 
-		return em.createQuery(jpql, Restaurante.class).setParameter("nome", "%" + nome + "%")
+		return manager.createQuery(jpql, Restaurante.class).setParameter("nome", "%" + nome + "%")
 				.setParameter("taxaInicial", taxaFreteInicial).setParameter("taxaFinal", taxaFreteFinal)
 				.getResultList();
 	}
@@ -71,7 +80,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 	// Consulta dinâmica com Criteria Query
 	@Override
 	public List<Restaurante> consulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
-		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
 		CriteriaQuery<Restaurante> restauranteCriteriaQuery = criteriaBuilder.createQuery(Restaurante.class);
 		Root<Restaurante> restauranteRoot = restauranteCriteriaQuery.from(Restaurante.class);
 
@@ -92,8 +101,15 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
 		restauranteCriteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-		TypedQuery<Restaurante> restauranteTypedQuery = em.createQuery(restauranteCriteriaQuery);
+		TypedQuery<Restaurante> restauranteTypedQuery = manager.createQuery(restauranteCriteriaQuery);
 		return restauranteTypedQuery.getResultList();
+	}
+
+
+
+	@Override
+	public List<Restaurante> findComFreteGratis(String nome) {
+		return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
 	}
 
 }
