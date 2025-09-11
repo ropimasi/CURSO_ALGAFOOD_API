@@ -2,6 +2,7 @@ package dev.ropimasi.curso.algafood.infrastructure.repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -27,17 +28,19 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom { 
 
 
 	@Override
-	public List<Restaurante> porNomeTaxaFreteEntre(String nome, BigDecimal taxaFreteInicial,
-			BigDecimal taxaFreteFinal) {
+	public List<Restaurante> porNomeTaxaFreteEntre(
+			String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		var jpql = "from Restaurante where nome like :nome and taxaFrete between :taxaInicial and :taxaFinal";
 
-		return em.createQuery(jpql, Restaurante.class).setParameter("nome", "%" + nome + "%")
-				.setParameter("taxaInicial", taxaFreteInicial).setParameter("taxaFinal", taxaFreteFinal)
+		return em.createQuery(jpql, Restaurante.class)
+				.setParameter("nome", "%" + nome + "%")
+				.setParameter("taxaInicial", taxaFreteInicial)
+				.setParameter("taxaFinal", taxaFreteFinal)
 				.getResultList();
 	}
 
-	/*Consulta dinâmica com JPQL.
-	@Override
+	// Consulta dinâmica com JPQL.
+	/*@Override
 	public List<Restaurante> consulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		var jpql = new StringBuilder();
 		jpql.append("from Restaurante where 0=0 ");
@@ -68,7 +71,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom { 
 
 
 
-	/* Consulta dinâmica com Criteria Query */
+	// Consulta dinâmica com Criteria Query
 	@Override
 	public List<Restaurante> consulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();

@@ -1,5 +1,7 @@
 package dev.ropimasi.curso.algafood.api.controller;
 
+import static dev.ropimasi.curso.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static dev.ropimasi.curso.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,8 @@ import dev.ropimasi.curso.algafood.domain.repository.CozinhaRepository;
 import dev.ropimasi.curso.algafood.domain.repository.RestauranteRepository;
 
 // teste renaming repo.
+
+
 
 
 @RestController
@@ -105,6 +109,14 @@ public class TesteController {
 	@GetMapping("/restaurantes/consulta")
 	public List<Restaurante> restaurantesConsulta(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 		return restauranteRepository.consulta(nome, taxaFreteInicial, taxaFreteFinal);
+	}
+
+
+
+	@GetMapping("/restaurantes/por-nome-com-frete-gratis")
+	public List<Restaurante> restaurantesPorNomeComFreteGratis(String nome) {
+
+		return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
 	}
 
 }
