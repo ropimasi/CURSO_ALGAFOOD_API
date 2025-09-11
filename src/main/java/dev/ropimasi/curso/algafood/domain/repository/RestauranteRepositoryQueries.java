@@ -7,7 +7,7 @@ import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 
 
 
-public interface RestauranteRepositoryCustom {
+public interface RestauranteRepositoryQueries {
 
 	List<Restaurante> porNomeTaxaFreteEntre(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
 

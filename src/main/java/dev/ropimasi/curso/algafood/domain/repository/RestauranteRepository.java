@@ -14,7 +14,7 @@ import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 
 @Repository
 public interface RestauranteRepository
-		extends JpaRepository<Restaurante, Long>, RestauranteRepositoryCustom, JpaSpecificationExecutor<Restaurante> {
+		extends JpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
 
 	List<Restaurante> findByNomeContaining(String nome);
 

@@ -15,8 +15,6 @@ import dev.ropimasi.curso.algafood.domain.model.Restaurante;
 import dev.ropimasi.curso.algafood.domain.repository.CozinhaRepository;
 import dev.ropimasi.curso.algafood.domain.repository.RestauranteRepository;
 
-// teste renaming repo.
-
 
 
 
