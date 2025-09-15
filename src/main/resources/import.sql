@@ -36,3 +36,4 @@ insert into forma_pagamento (id, descricao) values (3, 'PIX');
 insert into forma_pagamento (id, descricao) values (4, 'DEB');
 insert into forma_pagamento (id, descricao) values (5, 'CRE');
 
+insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) values (1, 3), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3); 
