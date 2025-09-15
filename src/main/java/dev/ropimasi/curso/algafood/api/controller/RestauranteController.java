@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,14 +78,14 @@ public class RestauranteController {
 	@PutMapping(value = "/{restauranteId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
 
-		Optional<Restaurante> restaurantePersistidoOpt = restauranteRepository.findById(restauranteId);
-		
-		if (restaurantePersistidoOpt.isPresent()) {
-			restaurante.setId(restauranteId);
-			
+		Restaurante restaurantePersistido = restauranteRepository.findById(restauranteId).orElse(null);
+
+		if (restaurantePersistido != null) {
+			BeanUtils.copyProperties(restaurante, restaurantePersistido, "id", "formasPagamento");
+
 			try {
-				restaurante = restauranteCadastroService.salvar(restaurante);
-				return ResponseEntity.status(HttpStatus.OK).body(restaurante);
+				restaurantePersistido = restauranteCadastroService.salvar(restaurantePersistido);
+				return ResponseEntity.status(HttpStatus.OK).body(restaurantePersistido);
 
 			} catch (EntidadeNaoEncontradaException e) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
